@@ -1,4 +1,5 @@
 from petstablished_finder import PetstablishedFinder
+from petango_finder import PetangoFinder
 import json
 
 
@@ -20,7 +21,20 @@ def main():
 	pawzabilities.run()
 	dogs.extend(pawzabilities.dogs)
 
+	# Saved Me Rescue
+	savedmerescue = PetangoFinder('https://www.petango.com/shelter_pets?shelterId=2399#page-', multiple_pages=True)
+	savedmerescue.run()
+	dogs.extend(savedmerescue.dogs)
 
+	# all4pawsrescue
+	allpawsrescue = PetangoFinder('https://www.petango.com/shelter_pets?shelterId=2027#page-', multiple_pages=True)
+	allpawsrescue.run()
+	dogs.extend(allpawsrescue.dogs)
+
+	# animal adoption center nj
+	aacnj = PetangoFinder('https://www.petango.com/shelter_pets?shelterId=3986&speciesId=1#page-', multiple_pages=True)
+	aacnj.run()
+	dogs.extend(aacnj.dogs)
 
 	# Print all dogs seen across sites available for adoption
 	print(json.dumps(dogs, indent=4, sort_keys=True))

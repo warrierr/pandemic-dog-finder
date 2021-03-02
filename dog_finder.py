@@ -1,5 +1,6 @@
 from abc import ABC,abstractmethod
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import requests
 
 class DogFinder(ABC):
@@ -34,8 +35,9 @@ class DogFinder(ABC):
         return True
 
     def _fetch_page_content(self, url):
-        r = requests.get(url)
-        return BeautifulSoup(r.text, features="html.parser")
+        driver = webdriver.Chrome(executable_path='/Users/ryanwarrier/src/pandemic-dog-finder/chromedriver')
+        driver.get(url)
+        return BeautifulSoup(driver.page_source, features="html.parser")        
 
     @abstractmethod
     def _extract_dog_htmls(self, content):
