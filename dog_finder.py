@@ -5,11 +5,12 @@ import requests
 
 class DogFinder(ABC):
 
-    def __init__(self, base_url, multiple_pages=False, starting_page_index=1):   
+    def __init__(self, base_url, multiple_pages=True, starting_page_index=1):
         self.base_url = base_url 
         self.multiple_pages = multiple_pages
         self.starting_page_index = starting_page_index
         self.dogs = []
+        self.needs_webdriver = False
 
     def run(self):
         curr_index = self.starting_page_index
@@ -35,9 +36,13 @@ class DogFinder(ABC):
         return True
 
     def _fetch_page_content(self, url):
-        driver = webdriver.Chrome(executable_path='/Users/ryanwarrier/src/pandemic-dog-finder/chromedriver')
-        driver.get(url)
-        return BeautifulSoup(driver.page_source, features="html.parser")        
+        if self.needs_webdriver:
+            driver = webdriver.Chrome(executable_path='/Users/ryanwarrier/src/pandemic-dog-finder/chromedriver')
+            driver.get(url)
+            content = driver.page_source
+        else:
+            content = requests.get(url).text
+        return BeautifulSoup(content, features="html.parser")        
 
     @abstractmethod
     def _extract_dog_htmls(self, content):
